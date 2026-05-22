@@ -17,10 +17,11 @@ pipeline {
             }
         }
 
-        stage('Test') {
+       stage('Test') {
             steps {
                 echo 'Running tests...'
-                bat 'docker run --rm --user root -v "%CD%":/app -w /app node:18-alpine sh -c "npm install && npm test"'
+                bat "docker build -t jenkins-demo-test --target test -f Dockerfile.test ."
+                bat "docker run --rm jenkins-demo-test"
             }
             post {
                 always {
