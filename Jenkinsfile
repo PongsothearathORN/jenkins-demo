@@ -17,7 +17,7 @@ pipeline {
             }
         }
 
-       stage('Test') {
+        stage('Test') {
             steps {
                 echo 'Running tests...'
                 bat "docker build -t jenkins-demo-test -f Dockerfile.test ."
@@ -49,7 +49,12 @@ pipeline {
         stage('Security') {
             steps {
                 echo 'Running Trivy security scan...'
-                bat "docker run --rm aquasec/trivy:latest image --exit-code 0 --severity LOW,MEDIUM,HIGH,CRITICAL %DOCKER_IMAGE%:%DOCKER_TAG%"
+                bat """docker run --rm ^
+                    -v //var/run/docker.sock:/var/run/docker.sock ^
+                    aquasec/trivy:latest image ^
+                    --exit-code 0 ^
+                    --severity LOW,MEDIUM,HIGH,CRITICAL ^
+                    %DOCKER_IMAGE%:%DOCKER_TAG%"""
             }
         }
 
