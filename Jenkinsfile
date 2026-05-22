@@ -20,7 +20,7 @@ pipeline {
        stage('Test') {
             steps {
                 echo 'Running tests...'
-                bat "docker build -t jenkins-demo-test --target test -f Dockerfile.test ."
+                bat "docker build -t jenkins-demo-test -f Dockerfile.test ."
                 bat "docker run --rm jenkins-demo-test"
             }
             post {
